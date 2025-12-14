@@ -6,6 +6,7 @@
   "publisher": "knu",
   "author": "Akinori Musha",
   "license": "MIT",
+  "icon": "icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/knu/vscode-editor-focus-notifier"

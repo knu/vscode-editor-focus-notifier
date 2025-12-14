@@ -1,6 +1,7 @@
-.vscode
+*.svg
+*.vsix
 .gitignore
+.vscode
 node_modules
 src
 tsconfig.json
-*.vsix
