@@ -1,0 +1,71 @@
+{
+  "name": "editor-focus-notifier",
+  "displayName": "Editor Focus Notifier",
+  "description": "Notifies external tools when entering/leaving the text editor area",
+  "version": "0.1.0",
+  "publisher": "knu",
+  "author": "Akinori Musha",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/knu/vscode-editor-focus-notifier"
+  },
+  "bugs": {
+    "url": "https://github.com/knu/vscode-editor-focus-notifier/issues"
+  },
+  "homepage": "https://github.com/knu/vscode-editor-focus-notifier#readme",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Editor Focus Notifier",
+      "properties": {
+        "editorFocusNotifier.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable focus state detection and command execution."
+        },
+        "editorFocusNotifier.onEnterEditorCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Shell command to run when entering editor-focus state."
+        },
+        "editorFocusNotifier.onLeaveEditorCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Shell command to run when leaving editor-focus state."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "editorFocusNotifier.showCurrentState",
+        "title": "Editor Focus Notifier: Show Current State"
+      },
+      {
+        "command": "editorFocusNotifier.forceReevaluate",
+        "title": "Editor Focus Notifier: Force Reevaluate"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.9.3"
+  }
+}
