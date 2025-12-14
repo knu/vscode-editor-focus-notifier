@@ -10,7 +10,7 @@ A VS Code extension that detects when you enter or leave the text editor area an
 
 ## Use Case
 
-The primary use case is to notify external tools so they can activate UI enhancements and event modifications using Karabiner-Elements and BetterTouchTool.
+The primary use case is to notify external tools so they can activate UI enhancements and event modifications using those tools' capabilities.
 
 ## Configuration
 
@@ -20,22 +20,39 @@ Configure the extension through VS Code settings:
 - **`editorFocusNotifier.onEnterEditorCommand`**: Shell command to run when entering editor focus state
 - **`editorFocusNotifier.onLeaveEditorCommand`**: Shell command to run when leaving editor focus state
 
-### Example Configuration
+### Example Configuration With Hammerspoon
 
 ```json
 {
-  "editorFocusNotifier.enable": true,
   "editorFocusNotifier.onEnterEditorCommand": "open \"hammerspoon://vscode-focus?mode=editor\"",
   "editorFocusNotifier.onLeaveEditorCommand": "open \"hammerspoon://vscode-focus?mode=other\""
 }
 ```
 
-Or with Karabiner:
+### Example Configuration With Karabiner-Elements
 
 ```json
 {
-  "editorFocusNotifier.onEnterEditorCommand": "karabiner_cli --select-profile 'VSCodeEditor'",
-  "editorFocusNotifier.onLeaveEditorCommand": "karabiner_cli --select-profile 'Default'"
+  "editorFocusNotifier.onEnterEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile 'VSCodeEditor'",
+  "editorFocusNotifier.onLeaveEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile 'Default'"
+}
+```
+
+Or:
+
+```json
+{
+  "editorFocusNotifier.onEnterEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{"vscode_editor_focused": true}'",
+  "editorFocusNotifier.onLeaveEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{"vscode_editor_focused": false}'"
+}
+```
+
+### Example Configuration With BetterTouchTool
+
+```json
+{
+  "editorFocusNotifier.onEnterEditorCommand": "open 'btt://set_number_variable?variableName=VSCodeEditorFocused&value=1'",
+  "editorFocusNotifier.onLeaveEditorCommand": "open 'btt://set_number_variable?variableName=VSCodeEditorFocused&value=0'"
 }
 ```
 
