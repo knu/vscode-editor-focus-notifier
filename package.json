@@ -2,7 +2,7 @@
   "name": "editor-focus-notifier",
   "displayName": "Editor Focus Notifier",
   "description": "Notifies external tools when entering/leaving the text editor area",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "knu",
   "author": "Akinori Musha",
   "license": "MIT",
