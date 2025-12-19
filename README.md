@@ -2,6 +2,8 @@
 
 A VS Code extension that detects when you enter or leave the text editor area and runs configurable shell commands on those transitions.
 
+[Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier)
+
 ## Features
 
 - Detects focus state transitions between editor and non-editor areas
