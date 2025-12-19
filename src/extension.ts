@@ -1,22 +1,42 @@
 import * as vscode from "vscode";
 import { spawn } from "child_process";
 
-type FocusState = "editor" | "non-editor";
+type FocusState = "editor" | "terminal" | "other";
 
 let outputChannel: vscode.OutputChannel;
 let currentState: FocusState | null = null;
 let config: {
   enable: boolean;
   onEnterEditorCommand: string;
-  onLeaveEditorCommand: string;
+  onEnterTerminalCommand: string;
+  onEnterOtherCommand: string;
 };
 
-function loadConfiguration(): void {
+async function loadConfiguration(): Promise<void> {
   const cfg = vscode.workspace.getConfiguration("editorFocusNotifier");
+
+  // Migration: if legacy onLeaveEditorCommand exists, migrate and remove it
+  const inspectLeave = cfg.inspect<string>("onLeaveEditorCommand");
+  const legacyOnLeaveEditorCommand = cfg.get<string>("onLeaveEditorCommand", "");
+
+  if (legacyOnLeaveEditorCommand) {
+    if (inspectLeave?.globalValue !== undefined) {
+      await cfg.update("onEnterTerminalCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Global);
+      await cfg.update("onEnterOtherCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Global);
+      await cfg.update("onLeaveEditorCommand", undefined, vscode.ConfigurationTarget.Global);
+    }
+    if (inspectLeave?.workspaceValue !== undefined) {
+      await cfg.update("onEnterTerminalCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Workspace);
+      await cfg.update("onEnterOtherCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Workspace);
+      await cfg.update("onLeaveEditorCommand", undefined, vscode.ConfigurationTarget.Workspace);
+    }
+  }
+
   config = {
     enable: cfg.get<boolean>("enable", true),
     onEnterEditorCommand: cfg.get<string>("onEnterEditorCommand", ""),
-    onLeaveEditorCommand: cfg.get<string>("onLeaveEditorCommand", ""),
+    onEnterTerminalCommand: cfg.get<string>("onEnterTerminalCommand", ""),
+    onEnterOtherCommand: cfg.get<string>("onEnterOtherCommand", ""),
   };
 }
 
@@ -43,18 +63,17 @@ function runCommand(cmd: string): void {
   }
 }
 
-function computeState(): FocusState {
-  const windowFocused = vscode.window.state.focused;
-  const hasActiveEditor = vscode.window.activeTextEditor !== undefined;
-
-  return windowFocused && hasActiveEditor ? "editor" : "non-editor";
+function computeState(ignoreFocus = false): FocusState {
+  if (!ignoreFocus && !vscode.window.state.focused) return "other";
+  if (vscode.window.activeTextEditor !== undefined) return "editor";
+  if (vscode.window.activeTerminal !== undefined) return "terminal";
+  return "other";
 }
 
 function evaluateState(): void {
   if (!config.enable) return;
 
   const newState = computeState();
-
   if (newState === currentState) return;
 
   currentState = newState;
@@ -64,19 +83,24 @@ function evaluateState(): void {
       outputChannel.appendLine("[enter] editor");
       runCommand(config.onEnterEditorCommand);
       break;
-    default:
-      outputChannel.appendLine("[leave] editor");
-      runCommand(config.onLeaveEditorCommand);
+    case "terminal":
+      outputChannel.appendLine("[enter] terminal");
+      runCommand(config.onEnterTerminalCommand);
+      break;
+    case "other":
+      outputChannel.appendLine("[enter] other");
+      runCommand(config.onEnterOtherCommand);
+      break;
   }
 }
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   outputChannel = vscode.window.createOutputChannel("Editor Focus Notifier");
 
-  loadConfiguration();
+  await loadConfiguration();
 
   // Set initial state and run corresponding command
-  currentState = computeState();
+  currentState = computeState(true);
   outputChannel.appendLine(`Initial state: ${currentState}`);
 
   if (config.enable) {
@@ -84,18 +108,21 @@ export function activate(context: vscode.ExtensionContext) {
       case "editor":
         runCommand(config.onEnterEditorCommand);
         break;
-      case "non-editor":
-        runCommand(config.onLeaveEditorCommand);
+      case "terminal":
+        runCommand(config.onEnterTerminalCommand);
+        break;
+      case "other":
+        runCommand(config.onEnterOtherCommand);
         break;
     }
   }
 
   // Subscribe to configuration changes
   context.subscriptions.push(
-    vscode.workspace.onDidChangeConfiguration((e) => {
+    vscode.workspace.onDidChangeConfiguration(async (e) => {
       if (e.affectsConfiguration("editorFocusNotifier")) {
         outputChannel.appendLine("Configuration changed");
-        loadConfiguration();
+        await loadConfiguration();
       }
     }),
   );

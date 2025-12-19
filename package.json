@@ -37,12 +37,17 @@
         "editorFocusNotifier.onEnterEditorCommand": {
           "type": "string",
           "default": "",
-          "description": "Shell command to run when entering editor-focus state."
+          "description": "Shell command to run when entering editor state."
         },
-        "editorFocusNotifier.onLeaveEditorCommand": {
+        "editorFocusNotifier.onEnterTerminalCommand": {
           "type": "string",
           "default": "",
-          "description": "Shell command to run when leaving editor-focus state."
+          "description": "Shell command to run when entering terminal state."
+        },
+        "editorFocusNotifier.onEnterOtherCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Shell command to run when entering other state."
         }
       }
     },

@@ -1,13 +1,13 @@
 # Editor Focus Notifier
 
-A VS Code extension that detects when you enter or leave the text editor area and runs configurable shell commands on those transitions.
+A VS Code extension that detects focus state transitions between editor, terminal, and other areas, running configurable shell commands on state changes.
 
 [Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier)
 
 ## Features
 
-- Detects focus state transitions between editor and non-editor areas
-- Runs custom shell commands when entering/leaving editor focus
+- Detects three distinct focus states: **editor**, **terminal**, and **other**
+- Runs custom shell commands when entering each state
 - Useful for integrating with external tools like Hammerspoon, Karabiner-Elements, and BetterTouchTool
 
 ## Use Case
@@ -19,33 +19,39 @@ The primary use case is to notify external tools so they can activate UI enhance
 Configure the extension through VS Code settings:
 
 - **`editorFocusNotifier.enable`**: Enable or disable the extension (default: `true`)
-- **`editorFocusNotifier.onEnterEditorCommand`**: Shell command to run when entering editor focus state
-- **`editorFocusNotifier.onLeaveEditorCommand`**: Shell command to run when leaving editor focus state
+- **`editorFocusNotifier.onEnterEditorCommand`**: Shell command to run when entering editor state
+- **`editorFocusNotifier.onEnterTerminalCommand`**: Shell command to run when entering terminal state
+- **`editorFocusNotifier.onEnterOtherCommand`**: Shell command to run when entering other state
 
 ### Example Configuration With Hammerspoon
 
 ```json
 {
   "editorFocusNotifier.onEnterEditorCommand": "open \"hammerspoon://vscode-focus?mode=editor\"",
-  "editorFocusNotifier.onLeaveEditorCommand": "open \"hammerspoon://vscode-focus?mode=other\""
+  "editorFocusNotifier.onEnterTerminalCommand": "open \"hammerspoon://vscode-focus?mode=terminal\"",
+  "editorFocusNotifier.onEnterOtherCommand": "open \"hammerspoon://vscode-focus?mode=other\""
 }
 ```
 
 ### Example Configuration With Karabiner-Elements
 
+Using profile switching:
+
 ```json
 {
   "editorFocusNotifier.onEnterEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile 'VSCodeEditor'",
-  "editorFocusNotifier.onLeaveEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile 'Default'"
+  "editorFocusNotifier.onEnterTerminalCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile 'VSCodeTerminal'",
+  "editorFocusNotifier.onEnterOtherCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile 'Default'"
 }
 ```
 
-Or:
+Using variables (requires separate variable for each state):
 
 ```json
 {
-  "editorFocusNotifier.onEnterEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{"vscode_editor_focused": true}'",
-  "editorFocusNotifier.onLeaveEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{"vscode_editor_focused": false}'"
+  "editorFocusNotifier.onEnterEditorCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{\"vscode_state\":\"editor\"}'",
+  "editorFocusNotifier.onEnterTerminalCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{\"vscode_state\":\"terminal\"}'",
+  "editorFocusNotifier.onEnterOtherCommand": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --set-variable '{\"vscode_state\":\"other\"}'"
 }
 ```
 
@@ -53,8 +59,9 @@ Or:
 
 ```json
 {
-  "editorFocusNotifier.onEnterEditorCommand": "open 'btt://set_number_variable?variableName=VSCodeEditorFocused&value=1'",
-  "editorFocusNotifier.onLeaveEditorCommand": "open 'btt://set_number_variable?variableName=VSCodeEditorFocused&value=0'"
+  "editorFocusNotifier.onEnterEditorCommand": "open 'btt://set_string_variable?variableName=VSCodeState&value=editor'",
+  "editorFocusNotifier.onEnterTerminalCommand": "open 'btt://set_string_variable?variableName=VSCodeState&value=terminal'",
+  "editorFocusNotifier.onEnterOtherCommand": "open 'btt://set_string_variable?variableName=VSCodeState&value=other'"
 }
 ```
 
@@ -65,13 +72,13 @@ Or:
 
 ## How It Works
 
-The extension considers the editor to be focused when:
-- VS Code window is focused, AND
-- An active text editor exists
+The extension detects three states:
 
-In all other cases (terminal focused, sidebar focused, window unfocused, etc.), the state is "non-editor".
+- **editor**: VS Code window is focused AND an active text editor exists
+- **terminal**: VS Code window is focused AND an active terminal exists (but no active editor)
+- **other**: All other cases (sidebar focused, window unfocused, etc.)
 
-Commands are executed only when the state actually changes, preventing unnecessary executions.
+Commands are executed only when the state actually changes, preventing unnecessary executions.  Initial state is determined at startup and the corresponding command runs once.
 
 ## Output Channel
 
