@@ -8,12 +8,7 @@
 - `editorFocusNotifier.onEnterOtherCommand` configuration for other state
 
 ### Changed
-- Renamed state "non-editor" to "other" for clarity
-- Initial state detection now ignores window focus check to correctly detect state at startup
-- Updated all configuration examples in README for three-state model
-
-### Deprecated
-- `editorFocusNotifier.onLeaveEditorCommand` - automatically migrates to `onEnterOtherCommand`
+- `editorFocusNotifier.onLeaveEditorCommand` automatically migrates to new settings and is removed
 
 ### Fixed
 - Extension now correctly detects initial state when VS Code launches with or without an editor open
