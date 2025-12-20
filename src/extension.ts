@@ -117,6 +117,16 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   }
 
+  // Re-evaluate state after a delay to detect correct initial status
+  const retryTimer = setTimeout(() => {
+    outputChannel.appendLine("Re-evaluating initial state after delay");
+    evaluateState();
+  }, 3000);
+
+  context.subscriptions.push({
+    dispose: () => clearTimeout(retryTimer),
+  });
+
   // Subscribe to configuration changes
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration(async (e) => {
