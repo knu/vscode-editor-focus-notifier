@@ -86,7 +86,9 @@ Check the "Editor Focus Notifier" output channel for debugging information about
 
 ## License
 
-MIT
+Copyright (c) 2025 Akinori Musha
+
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Repository
 
