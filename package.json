@@ -68,6 +68,8 @@
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\" \"*.json\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"*.json\"",
     "package": "vsce package",
     "publish": "vsce publish"
   },
@@ -77,6 +79,7 @@
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
     "@vscode/vsce": "^3.2.1",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0"
   }
