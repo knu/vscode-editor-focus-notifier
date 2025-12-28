@@ -134,44 +134,30 @@ export async function activate(context: vscode.ExtensionContext) {
         outputChannel.appendLine("Configuration changed");
         await loadConfiguration();
       }
-    }),
+    })
   );
 
   // Subscribe to state-changing events
-  context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor(() => evaluateState()),
-  );
+  context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(() => evaluateState()));
 
-  context.subscriptions.push(
-    vscode.window.onDidChangeWindowState(() => evaluateState()),
-  );
+  context.subscriptions.push(vscode.window.onDidChangeWindowState(() => evaluateState()));
 
-  context.subscriptions.push(
-    vscode.window.onDidChangeActiveTerminal(() => evaluateState()),
-  );
+  context.subscriptions.push(vscode.window.onDidChangeActiveTerminal(() => evaluateState()));
 
   // Register commands
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "editorFocusNotifier.showCurrentState",
-      () => {
-        const state = currentState ?? "unknown";
-        outputChannel.appendLine(`Current state: ${state}`);
-        vscode.window.showInformationMessage(
-          `Editor Focus Notifier state: ${state}`,
-        );
-      },
-    ),
+    vscode.commands.registerCommand("editorFocusNotifier.showCurrentState", () => {
+      const state = currentState ?? "unknown";
+      outputChannel.appendLine(`Current state: ${state}`);
+      vscode.window.showInformationMessage(`Editor Focus Notifier state: ${state}`);
+    })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "editorFocusNotifier.forceReevaluate",
-      () => {
-        outputChannel.appendLine("Force reevaluate triggered");
-        evaluateState();
-      },
-    ),
+    vscode.commands.registerCommand("editorFocusNotifier.forceReevaluate", () => {
+      outputChannel.appendLine("Force reevaluate triggered");
+      evaluateState();
+    })
   );
 
   outputChannel.appendLine("Editor Focus Notifier activated");
