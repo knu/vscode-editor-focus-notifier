@@ -71,7 +71,9 @@
     "format": "prettier --write \"src/**/*.ts\" \"*.json\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"*.json\"",
     "package": "vsce package",
-    "publish": "vsce publish"
+    "publish": "npm run publish:vsce && npm run publish:ovsx",
+    "publish:vsce": "vsce publish --packagePath \"$(npm pkg get name version | jq -rs '.[0] | \"\\(.name)-\\(.version).vsix\"')\"",
+    "publish:ovsx": "ovsx publish --packagePath \"$(npm pkg get name version | jq -rs '.[0] | \"\\(.name)-\\(.version).vsix\"')\""
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
@@ -79,6 +81,7 @@
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
     "@vscode/vsce": "^3.2.1",
+    "ovsx": "^0.10.7",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0"
