@@ -2,7 +2,10 @@
 
 A VS Code extension that detects focus state transitions between editor, terminal, and other areas, running configurable shell commands on state changes.
 
-[Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier)
+## Install
+
+- Visual Studio Marketplace: https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier.  Official Microsoft marketplace listing for VS Code.
+- Open VSX: https://open-vsx.org/extension/knu/editor-focus-notifier.  Alternative registry used by VSCodium and other forks.
 
 ## Features
 
