@@ -83,13 +83,47 @@ The extension detects three states:
 
 Commands are executed only when the state actually changes, preventing unnecessary executions.  Initial state is determined at startup and the corresponding command runs once.
 
+## Environment Variables
+
+The following environment variables are available in shell commands:
+
+- **`EDITOR_APP_NAME`**: Full application name (e.g., `Visual Studio Code`, `Cursor`)
+- **`EDITOR_NAME`**: Normalized short name (e.g., `vscode`, `cursor`)
+
+### Example Usage
+
+```json
+{
+  "editorFocusNotifier.onEnterEditorCommand": "echo \"Entering editor in $EDITOR_NAME\" >> ~/editor.log"
+}
+```
+
 ## Output Channel
 
 Check the "Editor Focus Notifier" output channel for debugging information about state transitions and command execution.
 
+## Bonus Features
+
+### Context Variables
+
+The extension provides the following context variables for use in `keybindings.json`:
+
+- **`editorAppName`**: Full application name (e.g., `Visual Studio Code`, `Cursor`, `VSCodium`)
+- **`editorName`**: Normalized short name (e.g., `vscode`, `cursor`, `vscodium`)
+
+Example keybinding:
+
+```json
+{
+  "key": "cmd+k",
+  "command": "myExtension.doSomething",
+  "when": "editorName == 'cursor'"
+}
+```
+
 ## License
 
-Copyright (c) 2025 Akinori Musha
+Copyright (c) 2025-2026 Akinori Musha
 
 MIT License - see [LICENSE](LICENSE) file for details.
 

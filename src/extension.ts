@@ -5,6 +5,7 @@ type FocusState = "editor" | "terminal" | "other";
 
 let outputChannel: vscode.OutputChannel;
 let currentState: FocusState | null = null;
+let commandEnv: NodeJS.ProcessEnv;
 let config: {
   enable: boolean;
   onEnterEditorCommand: string;
@@ -51,6 +52,7 @@ function runCommand(cmd: string): void {
       shell: true,
       detached: true,
       stdio: "ignore",
+      env: commandEnv,
     });
 
     child.unref();
@@ -96,6 +98,21 @@ function evaluateState(): void {
 
 export async function activate(context: vscode.ExtensionContext) {
   outputChannel = vscode.window.createOutputChannel("Editor Focus Notifier");
+
+  // Expose appName as context variables for keybindings and environment variables for commands
+  const editorAppName = vscode.env.appName;
+  const editorName = editorAppName
+    .replace(/ - .*/, "")
+    .replace(/Visual Studio Code/, "vscode")
+    .replace(/ /g, "_")
+    .toLowerCase();
+  await vscode.commands.executeCommand("setContext", "editorAppName", editorAppName);
+  await vscode.commands.executeCommand("setContext", "editorName", editorName);
+  commandEnv = {
+    ...process.env,
+    EDITOR_APP_NAME: editorAppName,
+    EDITOR_NAME: editorName,
+  };
 
   await loadConfiguration();
 
