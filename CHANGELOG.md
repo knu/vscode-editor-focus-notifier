@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] - 2026-01-04
+
+### Added
+- `EDITOR_APP_NAME` and `EDITOR_NAME` environment variables are now passed to executed commands
+- `editorAppName` and `editorName` context variables exposed for use in keybindings
+
 ## [0.2.0] - 2025-12-19
 
 ### Added
