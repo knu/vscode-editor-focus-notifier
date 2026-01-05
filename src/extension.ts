@@ -16,23 +16,6 @@ let config: {
 async function loadConfiguration(): Promise<void> {
   const cfg = vscode.workspace.getConfiguration("editorFocusNotifier");
 
-  // Migration: if legacy onLeaveEditorCommand exists, migrate and remove it
-  const inspectLeave = cfg.inspect<string>("onLeaveEditorCommand");
-  const legacyOnLeaveEditorCommand = cfg.get<string>("onLeaveEditorCommand", "");
-
-  if (legacyOnLeaveEditorCommand) {
-    if (inspectLeave?.globalValue !== undefined) {
-      await cfg.update("onEnterTerminalCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Global);
-      await cfg.update("onEnterOtherCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Global);
-      await cfg.update("onLeaveEditorCommand", undefined, vscode.ConfigurationTarget.Global);
-    }
-    if (inspectLeave?.workspaceValue !== undefined) {
-      await cfg.update("onEnterTerminalCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Workspace);
-      await cfg.update("onEnterOtherCommand", legacyOnLeaveEditorCommand, vscode.ConfigurationTarget.Workspace);
-      await cfg.update("onLeaveEditorCommand", undefined, vscode.ConfigurationTarget.Workspace);
-    }
-  }
-
   config = {
     enable: cfg.get<boolean>("enable", true),
     onEnterEditorCommand: cfg.get<string>("onEnterEditorCommand", ""),

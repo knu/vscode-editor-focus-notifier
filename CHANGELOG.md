@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- Remove legacy `editorFocusNotifier.onLeaveEditorCommand` migration logic
+
 ## [0.2.1] - 2026-01-04
 
 ### Added
