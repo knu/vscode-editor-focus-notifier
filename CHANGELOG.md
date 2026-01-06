@@ -2,8 +2,12 @@
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-01-06
+
 ### Changed
 - Remove legacy `editorFocusNotifier.onLeaveEditorCommand` migration logic
+- Improve test coverage
+- Set GitHub Pages homepage URL
 
 ## [0.2.1] - 2026-01-04
 

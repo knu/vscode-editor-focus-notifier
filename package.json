@@ -2,7 +2,7 @@
   "name": "editor-focus-notifier",
   "displayName": "Editor Focus Notifier",
   "description": "VS Code extension that detects focus state transitions between editor, terminal, and other areas, running configurable shell commands on state changes",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publisher": "knu",
   "author": "Akinori Musha",
   "license": "MIT",
