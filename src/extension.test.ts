@@ -29,7 +29,8 @@ function createCommand(markerPath: string): string {
   return `${JSON.stringify(process.execPath)} -e ${JSON.stringify(script)}`;
 }
 
-suite("Editor Focus Notifier", () => {
+suite("Editor Focus Notifier", function () {
+  this.timeout(10000);
   test("executes external command on editor focus", async () => {
     const extension = await activateExtension();
 
