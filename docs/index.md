@@ -13,13 +13,13 @@ other areas, running configurable shell commands on state changes.
 ## Extension Listings
 
 - **Open VSX Registry**
-  https://open-vsx.org/extension/knu/editor-focus-notifier
+  [https://open-vsx.org/extension/knu/editor-focus-notifier](https://open-vsx.org/extension/knu/editor-focus-notifier)
 
 - **VS Code Marketplace**
-  https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier
+  [https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier](https://marketplace.visualstudio.com/items?itemName=knu.editor-focus-notifier)
 
 - **GitHub Repository**
-  https://github.com/knu/vscode-editor-focus-notifier
+  [https://github.com/knu/vscode-editor-focus-notifier](https://github.com/knu/vscode-editor-focus-notifier)
 
 ---
 
