@@ -5,8 +5,8 @@ title: Editor Focus Notifier
 # Editor Focus Notifier
 
 **Editor Focus Notifier** is a Visual Studio Code-compatible extension
-that executes user-configured commands when the editor gains or loses
-focus.
+that detects focus state transitions between editor, terminal, and
+other areas, running configurable shell commands on state changes.
 
 ---
 
@@ -25,8 +25,15 @@ focus.
 
 ## What This Extension Does
 
-This extension listens for editor focus / blur events and runs
-commands explicitly configured by the user.
+This extension detects three states:
+
+- **editor**: VS Code window is focused AND an active text editor exists
+- **terminal**: VS Code window is focused AND an active terminal exists
+  (but no active editor)
+- **other**: All other cases (sidebar focused, window unfocused, etc.)
+
+Commands run only when the state changes.  The initial state is
+evaluated at startup and its command runs once.
 
 ---
 
@@ -47,7 +54,8 @@ and trusted.**
 
 This extension is written and maintained by Akinori Musha.
 
-For issues or security concerns, please use the GitHub repository above.
+For issues or security concerns, please use the GitHub repository
+linked above.
 
 ---
 
