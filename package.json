@@ -1,7 +1,7 @@
 {
   "name": "editor-focus-notifier",
   "displayName": "Editor Focus Notifier",
-  "description": "Notifies external tools when entering/leaving the text editor area",
+  "description": "VS Code extension that detects focus state transitions between editor, terminal, and other areas, running configurable shell commands on state changes",
   "version": "0.2.1",
   "publisher": "knu",
   "author": "Akinori Musha",
@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/knu/vscode-editor-focus-notifier/issues"
   },
-  "homepage": "https://github.com/knu/vscode-editor-focus-notifier#readme",
+  "homepage": "https://vscode-editor-focus-notifier.idaemons.org/",
   "engines": {
     "vscode": "^1.95.0"
   },
