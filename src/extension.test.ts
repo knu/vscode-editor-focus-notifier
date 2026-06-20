@@ -17,6 +17,16 @@ async function waitForFile(filePath: string, timeoutMs = 8000): Promise<void> {
   throw new Error(`Timed out waiting for file: ${filePath}`);
 }
 
+async function waitFor(condition: () => boolean, timeoutMs = 8000): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (condition()) return;
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+
+  throw new Error("Timed out waiting for condition");
+}
+
 async function activateExtension(): Promise<vscode.Extension<unknown>> {
   const extension = vscode.extensions.getExtension("knu.editor-focus-notifier");
   assert.ok(extension, "Extension is not found");
@@ -48,6 +58,7 @@ suite("Editor Focus Notifier", function () {
 
       const doc = await vscode.workspace.openTextDocument({ content: "focus test" });
       await vscode.window.showTextDocument(doc, vscode.ViewColumn.One, false);
+      await waitFor(() => vscode.window.activeTextEditor?.document === doc);
 
       await vscode.commands.executeCommand("editorFocusNotifier.forceReevaluate");
 
@@ -74,6 +85,7 @@ suite("Editor Focus Notifier", function () {
 
       const terminal = vscode.window.createTerminal("Focus Notifier Test");
       terminal.show();
+      await waitFor(() => vscode.window.activeTerminal === terminal);
 
       await vscode.commands.executeCommand("editorFocusNotifier.forceReevaluate");
       await waitForFile(markerPath);
@@ -101,7 +113,9 @@ suite("Editor Focus Notifier", function () {
 
       const terminal = vscode.window.createTerminal("Focus Notifier Test");
       terminal.show();
+      await waitFor(() => vscode.window.activeTerminal === terminal);
       terminal.dispose();
+      await waitFor(() => vscode.window.activeTerminal === undefined);
 
       await vscode.commands.executeCommand("editorFocusNotifier.forceReevaluate");
       await waitForFile(markerPath);
