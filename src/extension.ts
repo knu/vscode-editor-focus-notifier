@@ -55,10 +55,10 @@ function computeState(ignoreFocus = false): FocusState {
   return "other";
 }
 
-function evaluateState(): void {
+function evaluateState(ignoreFocus = false): void {
   if (!config.enable) return;
 
-  const newState = computeState();
+  const newState = computeState(ignoreFocus);
   if (newState === currentState) return;
 
   currentState = newState;
@@ -156,7 +156,8 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("editorFocusNotifier.forceReevaluate", () => {
       outputChannel.appendLine("Force reevaluate triggered");
-      evaluateState();
+      currentState = null;
+      evaluateState(true);
     })
   );
 
