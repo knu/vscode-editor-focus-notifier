@@ -9,7 +9,6 @@ queue_rules:
       - author ~= ^(dependabot|renovate)\[bot\]$
       - -draft
       - -conflict
-      - label != dependencies:major
       - "#approved-reviews-by >= 1"
     merge_conditions:
       - "#approved-reviews-by >= 1"
@@ -20,5 +19,4 @@ merge_protections_settings:
     - author ~= ^(dependabot|renovate)\[bot\]$
     - -draft
     - -conflict
-    - label != dependencies:major
     - "#approved-reviews-by >= 1"
