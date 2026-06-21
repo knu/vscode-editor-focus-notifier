@@ -20,3 +20,4 @@ merge_protections_settings:
     - -draft
     - -conflict
     - "#approved-reviews-by >= 1"
+  reporting_method: check-runs
